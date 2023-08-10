@@ -6,7 +6,10 @@ export type UserDocument = User & Document;
 
 @Schema()
 export class User extends Document {
-  @Prop()
+  @Prop({ index: true, unique: true })
+  id: number;
+
+  @Prop({ index: true })
   name: string;
 
   @Prop()
@@ -14,6 +17,13 @@ export class User extends Document {
 
   @Prop()
   type: UserType;
+
+  @Prop({
+    default: () => {
+      return new Date();
+    },
+  })
+  createdAt: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

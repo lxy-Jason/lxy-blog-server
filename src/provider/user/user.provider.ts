@@ -19,7 +19,7 @@ export class UserProvider {
   }
 
   async getNewId(): Promise<number> {
-    const [lastUser] = await this.userModel.find().sort({ id: -1 }).limit(1);
+    const [lastUser] = await this.userModel.find({}).sort({ id: -1 }).limit(1);
     if (!lastUser) {
       return 1;
     } else {
@@ -32,6 +32,9 @@ export class UserProvider {
     const hasName = await this.getUserByName(name);
     if (hasName) {
       throw new ForbiddenException('用户名已存在');
+    }
+    if (type !== 'admin' && type !== 'collaborator' && type !== 'visitor') {
+      throw new ForbiddenException('用户类型错误');
     }
     return await this.userModel.create({
       id: await this.getNewId(),
