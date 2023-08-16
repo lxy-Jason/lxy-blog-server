@@ -11,6 +11,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserController } from './controller/user.controller';
 import { UserProvider } from './provider/user/user.provider';
 import { User, UserSchema } from './schema/user.schema';
+import { ArticleProvider } from './provider/article/article.provider';
+import { CategoryProvider } from './provider/category/category.provider';
+import { Article, ArticleSchema } from './schema/article.schema';
+import { Category, CategorySchema } from './schema/category.schema';
+import { CategoryController } from './controller/category.controller';
+import { ArticleController } from './controller/article.controller';
 
 @Module({
   imports: [
@@ -19,9 +25,16 @@ import { User, UserSchema } from './schema/user.schema';
     }),
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema }, // 这里User.name实际上就是Class User 这个User
+      { name: Article.name, schema: ArticleSchema },
+      { name: Category.name, schema: CategorySchema },
     ]),
   ],
-  controllers: [AppController, UserController],
-  providers: [AppService, UserProvider],
+  controllers: [
+    AppController,
+    UserController,
+    CategoryController,
+    ArticleController,
+  ],
+  providers: [AppService, UserProvider, CategoryProvider, ArticleProvider],
 })
 export class AppModule {}
