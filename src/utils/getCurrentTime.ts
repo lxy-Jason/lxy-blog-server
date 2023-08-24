@@ -1,5 +1,5 @@
-import m from 'moment';
+import * as moment from 'moment';
 
-export default function () {
-  return m().format('YYYY-MM-DD HH:mm:ss');
+export default function getCurrentTime() {
+  return moment().format('YYYY-MM-DD HH:mm:ss');
 }

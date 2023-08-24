@@ -23,19 +23,30 @@ export class Article extends Document {
 
   @Prop({
     index: true,
-    default: () => {
-      return getCurrentTime();
-    },
+    default: getCurrentTime(),
   })
   createdAt: string;
 
   @Prop({
     index: true,
-    default: () => {
-      return getCurrentTime;
-    },
+    default: getCurrentTime(),
   })
   updatedAt: string;
+
+  @Prop({ default: 0, index: true })
+  top: number;
+
+  @Prop({ default: 0 })
+  viewer: number; // 浏览人数
+
+  @Prop({ default: 0 })
+  visited: number; // 访问量
+
+  @Prop({
+    index: true,
+    default: getCurrentTime(),
+  })
+  lastVisitedTime: string;
 }
 
 export const ArticleSchema = SchemaFactory.createForClass(Article);

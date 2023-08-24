@@ -7,3 +7,8 @@ export interface Article {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export interface ArticleListParams {
+  page: number;
+  pageSize: number;
+}

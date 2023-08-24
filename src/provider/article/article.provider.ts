@@ -30,11 +30,26 @@ export class ArticleProvider {
     const data = getArticleData(path);
     data.updatedAt = getCurrentTime();
     const res = await this.articleModel.updateOne({ path: path }, data);
-    console.log(res);
   }
 
   async getArticleByPath(path: string) {
     const res = await this.articleModel.findOne({ path: path }).exec();
+    return res;
+  }
+
+  async getArticleById(id: string) {
+    console.log(id);
+    const res = await this.articleModel.findOne({ _id: id }).exec();
+    return res;
+  }
+
+  async getArticleList(params) {
+    const { page = 1, pageSize = 10 } = params;
+    const res = await this.articleModel
+      .find()
+      .skip((page - 1) * pageSize)
+      .limit(pageSize)
+      .exec();
     return res;
   }
 }

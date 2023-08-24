@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import simpleGit from 'simple-git';
-import { Article } from "../types/article";
+import { Article } from '../types/article';
 
 process.env.http_proxy = 'http://127.0.0.1:7890';
 process.env.https_proxy = 'http://127.0.0.1:7890';
@@ -9,7 +9,7 @@ const git = simpleGit(rootPath);
 
 // 设置 git config,解决中文乱码问题
 git.addConfig('core.quotepath', 'false', () => {
-  console.log('git config 设置成功！');
+  console.log('git config 设置文件名不转义！');
 });
 
 //获取文件名数组
@@ -26,7 +26,7 @@ export async function getArticlePath(): Promise<string[]> {
 export function getArticleData(path): Article {
   const arr = path.split('/');
   const fileData = {
-    title: arr.pop(),
+    title: arr.pop().replace('.md', ''),
     path,
     content: '',
   };

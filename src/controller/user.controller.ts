@@ -4,7 +4,7 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { User } from '../types/user';
 
 @ApiTags('user')
-@Controller('/api/user/')
+@Controller('/user/')
 export class UserController {
   constructor(private readonly userProvider: UserProvider) {}
 
