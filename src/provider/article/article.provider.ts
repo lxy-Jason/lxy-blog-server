@@ -52,4 +52,9 @@ export class ArticleProvider {
       .exec();
     return res;
   }
+
+  async getAllArticleNum() {
+    const res = await this.articleModel.countDocuments().exec();
+    return res;
+  }
 }
