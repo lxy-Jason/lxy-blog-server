@@ -13,6 +13,11 @@ export class ArticleController {
     return await this.articleProvider.setArticleByPath();
   }
 
+  @Get('updateAllArticle')
+  async updateAllArticle() {
+    return await this.articleProvider.updateAllArticle();
+  }
+
   @Get('getArticleByPath/:path')
   @ApiParam({
     name: 'path',

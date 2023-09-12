@@ -2,7 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ArticleDucoment } from '../../schema/article.schema';
 import { Model } from 'mongoose';
-import { getArticleData, getArticlePath } from '../../utils/addArticleByNote';
+import {
+  getArticleData,
+  getArticlePath,
+  getAllArticlePath,
+} from '../../utils/addArticleByNote';
 import getCurrentTime from '../../utils/getCurrentTime';
 
 @Injectable()
@@ -11,9 +15,7 @@ export class ArticleProvider {
     @InjectModel('Article') private articleModel: Model<ArticleDucoment>,
   ) {}
 
-  async setArticleByPath() {
-    const paths = await getArticlePath(); //获取文章路径
-    console.log(paths);
+  async handlerArticle(paths) {
     for (const path of paths) {
       const isExist = await this.articleModel.findOne({ path: path });
       if (isExist) {
@@ -21,9 +23,14 @@ export class ArticleProvider {
       } else {
         const data = getArticleData(path);
         const res = await this.articleModel.create(data);
-        console.log(res);
       }
     }
+  }
+
+  async setArticleByPath() {
+    const paths = await getArticlePath(); //获取文章路径
+    console.log(paths);
+    await this.handlerArticle(paths);
   }
 
   async updateArticle(path) {
@@ -56,5 +63,10 @@ export class ArticleProvider {
   async getAllArticleNum() {
     const res = await this.articleModel.countDocuments().exec();
     return res;
+  }
+
+  async updateAllArticle() {
+    const paths = getAllArticlePath(); //获取文章路径
+    await this.handlerArticle(paths);
   }
 }
