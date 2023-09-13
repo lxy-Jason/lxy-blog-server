@@ -36,5 +36,6 @@ import { ArticleController } from './controller/article.controller';
     ArticleController,
   ],
   providers: [AppService, UserProvider, CategoryProvider, ArticleProvider],
+  exports:[ArticleProvider]
 })
 export class AppModule {}

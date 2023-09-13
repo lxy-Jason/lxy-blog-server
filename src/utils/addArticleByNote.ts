@@ -29,7 +29,8 @@ export function getArticleData(path): Article {
   const regex = /\!\[(.*)\]\((.*)\)\r\n/g; //匹配图片正则
   const fileData = {
     title: arr.pop().replace('.md', ''),
-    path: arr.join('\\'),
+    path: path,
+    category: arr[0],
     content: '',
   };
   try {
@@ -45,7 +46,8 @@ export function getArticleData(path): Article {
   }
 }
 
-const ignoreFiles = ['.git', 'image'];
+const ignoreFiles = ['.git', 'image', 'commit.bat'];
+
 //递归获取所有文件路径
 export function getAllArticlePath(directoryPath = rootPath) {
   const res = [];
@@ -56,6 +58,7 @@ export function getAllArticlePath(directoryPath = rootPath) {
       const filePath = path.join(directoryPath, file);
       const stats = fs.statSync(filePath);
       if (stats.isFile()) {
+        if (!filePath.endsWith('.md')) return; //只获取md文件
         res.push(filePath.replace(/^src\\note\\/, ''));
       } else if (stats.isDirectory()) {
         const subFiles = getAllArticlePath(filePath);
@@ -66,4 +69,10 @@ export function getAllArticlePath(directoryPath = rootPath) {
     console.error('Error reading directory:', err);
   }
   return res;
+}
+
+//获取note文件夹下所有子目录(分类名)
+export function getArticleCategory() {
+  const files = fs.readdirSync(rootPath);
+  return files.filter((item) => !ignoreFiles.includes(item));
 }
