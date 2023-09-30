@@ -23,7 +23,7 @@ export class ArticleProvider {
         await this.updateArticle(path);
       } else {
         const data = getArticleData(path);
-        const res = await this.articleModel.create(data);
+        await this.articleModel.create(data);
       }
     }
   }
@@ -39,7 +39,7 @@ export class ArticleProvider {
   async updateArticle(path) {
     const data = getArticleData(path);
     data.updatedAt = getCurrentTime();
-    const res = await this.articleModel.updateOne({ path: path }, data);
+    await this.articleModel.updateOne({ path: path }, data);
   }
 
   // 通过文章路径获取文章
