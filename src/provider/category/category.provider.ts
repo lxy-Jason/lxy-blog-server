@@ -33,6 +33,18 @@ export class CategoryProvider {
 
   // 获取分类列表
   async getCategoryList() {
-    return await this.categoryModal.find().exec();
+    const categoryList = await this.categoryModal.find().exec();
+    const res = categoryList.map(async (category) => {
+      const articleList: { title: string; updatedAt: string }[] =
+        await this.articleModel
+          .find({ category: category.name })
+          .select('title updatedAt');
+      return {
+        name: category.name,
+        articleList,
+      };
+    });
+    console.log(res);
+    return res;
   }
 }
