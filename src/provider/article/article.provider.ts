@@ -83,4 +83,13 @@ export class ArticleProvider {
     const res = this.articleModel.find({ category }).countDocuments().exec();
     return res;
   }
+
+  //根据分类名获取对应的文章列表,时间倒序排列
+  async getArticleCountByCategoryName(name) {
+    const res = this.articleModel
+      .find({ category: name })
+      .sort({ createdAt: -1 })
+      .select('title createdAt _id');
+    return res;
+  }
 }

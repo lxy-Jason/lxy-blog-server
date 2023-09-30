@@ -4,6 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
   const options = new DocumentBuilder()
     .setTitle('lxy-blog-api')
     .setDescription('博客接口文档')

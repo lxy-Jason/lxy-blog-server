@@ -104,4 +104,27 @@ export class ArticleController {
       };
     }
   }
+
+  @Get('getArticleCountByCategoryName/:name')
+  @ApiParam({
+    name: 'name',
+    description: '分类名',
+    required: true,
+  })
+  async getArticleCountByCategoryName(@Param('name') name: string) {
+    const res = await this.articleProvider.getArticleCountByCategoryName(name);
+    if (res) {
+      return {
+        code: 200,
+        data: res,
+        msg: '文章列表获取成功',
+      };
+    } else {
+      return {
+        code: 500,
+        data: null,
+        msg: '文章列表获取失败',
+      };
+    }
+  }
 }
