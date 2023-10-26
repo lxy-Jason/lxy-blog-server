@@ -18,9 +18,10 @@ import { Category, CategorySchema } from './schema/category.schema';
 import { CategoryController } from './controller/category.controller';
 import { ArticleController } from './controller/article.controller';
 
+const url = process.env.MONGO_URL || '127.0.0.1';
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://127.0.0.1', {
+    MongooseModule.forRoot(`mongodb://${url}`, {
       dbName: 'blog',
     }),
     MongooseModule.forFeature([

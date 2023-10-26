@@ -5,7 +5,7 @@ import { Article } from '../types/article';
 
 process.env.http_proxy = 'http://127.0.0.1:7890';
 process.env.https_proxy = 'http://127.0.0.1:7890';
-const rootPath = './src/note/';
+const rootPath = 'note/';
 const git = simpleGit(rootPath);
 
 // 设置 git config,解决中文乱码问题
@@ -25,7 +25,13 @@ export async function getArticlePath(): Promise<string[]> {
 }
 
 export function getArticleData(path): Article {
-  const arr = path.split('\\');
+  let arr = [];
+  if (process.env.NODE_ENV === 'development') {
+    arr = path.split('\\');
+  } else {
+    arr = path.split('/');
+  }
+
   const regex = /\!\[(.*)\]\((.*)\)\r\n/g; //匹配图片正则
   const fileData = {
     title: arr.pop().replace('.md', ''),
@@ -37,7 +43,9 @@ export function getArticleData(path): Article {
     const data = fs.readFileSync(rootPath + path, 'utf8');
     const modifiedText = data.replace(
       regex,
-      `![$1](https://raw.githubusercontent.com/lxy-Jason/note/master/${fileData.path}/$2)\r\n`,
+      `![$1](https://raw.githubusercontent.com/lxy-Jason/note/master/${arr.join(
+        '/',
+      )}/$2)\r\n`,
     );
     fileData.content = modifiedText;
     return fileData;
@@ -59,7 +67,7 @@ export function getAllArticlePath(directoryPath = rootPath) {
       const stats = fs.statSync(filePath);
       if (stats.isFile()) {
         if (!filePath.endsWith('.md')) return; //只获取md文件
-        res.push(filePath.replace(/^src\\note\\/, ''));
+        res.push(filePath.replace(/^note[\\/]/, '')); //兼容note/ 和 note\ 两种路径情况
       } else if (stats.isDirectory()) {
         const subFiles = getAllArticlePath(filePath);
         res.push(...subFiles);
@@ -74,5 +82,6 @@ export function getAllArticlePath(directoryPath = rootPath) {
 //获取note文件夹下所有子目录(分类名)
 export function getArticleCategory() {
   const files = fs.readdirSync(rootPath);
+  console.log(files);
   return files.filter((item) => !ignoreFiles.includes(item));
 }
