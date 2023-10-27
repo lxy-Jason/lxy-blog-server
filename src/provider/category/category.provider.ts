@@ -34,17 +34,26 @@ export class CategoryProvider {
   // 获取分类列表
   async getCategoryList() {
     const categoryList = await this.categoryModal.find().exec();
-    const res = categoryList.map(async (category) => {
-      const articleList: { title: string; updatedAt: string }[] =
-        await this.articleModel
+    const res = await Promise.all(
+      categoryList.map(async (category) => {
+        const articleList = await this.articleModel
           .find({ category: category.name })
-          .select('title updatedAt');
-      return {
-        name: category.name,
-        articleList,
-      };
-    });
-    console.log(res);
+          .select('title updatedAt _id')
+          .lean();
+        if (!articleList) {
+          return;
+        }
+        const temp = articleList.map((item) => ({
+          id: item._id,
+          title: item.title,
+          date: item.updatedAt,
+        }));
+        return {
+          name: category.name,
+          articleList: temp,
+        };
+      }),
+    );
     return res;
   }
 }

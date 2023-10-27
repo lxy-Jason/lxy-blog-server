@@ -88,8 +88,8 @@ export class ArticleProvider {
   async getArticleCountByCategoryName(name) {
     const res = this.articleModel
       .find({ category: name })
-      .sort({ createdAt: -1 })
-      .select('title createdAt _id');
+      .sort({ updatedAt: -1 })
+      .select('title updatedAt _id');
     return res;
   }
 
