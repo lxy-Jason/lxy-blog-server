@@ -127,4 +127,38 @@ export class ArticleController {
       };
     }
   }
+
+  @Get('getTimelineInfo')
+  async getTimelineInfo() {
+    const res = await this.articleProvider.getTimelineInfo();
+    if (res) {
+      console.log(res);
+      const monthArr = Array.from(
+        new Set(res.map((item) => item.updatedAt.slice(0, 7))),
+      );
+      console.log(monthArr);
+      //数据处理
+      const arr = res.map((item) => ({
+        title: item.title,
+        id: item._id,
+        date: item.updatedAt,
+        month: item.updatedAt.slice(0, 7),
+      }));
+      const list = {};
+      for (const month of monthArr) {
+        list[month] = arr.filter((item) => item.month === month);
+      }
+      return {
+        data: list,
+        code: 200,
+        msg: '列表获取成功',
+      };
+    } else {
+      return {
+        code: 500,
+        data: null,
+        msg: '文章列表获取失败',
+      };
+    }
+  }
 }

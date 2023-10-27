@@ -92,4 +92,13 @@ export class ArticleProvider {
       .select('title createdAt _id');
     return res;
   }
+
+  //根据创建时间返回文章列表timeline
+  async getTimelineInfo() {
+    const res = this.articleModel
+      .find()
+      .sort({ updatedAt: -1 })
+      .select('title updatedAt _id');
+    return res;
+  }
 }
