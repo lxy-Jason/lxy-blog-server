@@ -68,7 +68,7 @@ export class ArticleController {
   @Post('getArticleList')
   async getArticleList(@Body() params: ArticleListParams) {
     const res = await this.articleProvider.getArticleList(params);
-    const total = await this.articleProvider.getAllArticleNum();
+    const total = await this.articleProvider.getAllStarArticleNum();
     if (res) {
       return {
         code: 200,
@@ -87,20 +87,20 @@ export class ArticleController {
     }
   }
 
-  @Get('getAllArticleNum')
-  async getAllArticleNum() {
-    const res = await this.articleProvider.getAllArticleNum();
+  @Get('getAllStarArticleNum')
+  async getAllStarArticleNum() {
+    const res = await this.articleProvider.getAllStarArticleNum();
     if (res) {
       return {
         code: 200,
         data: res,
-        msg: '文章总数获取成功',
+        msg: '精选文章总数获取成功',
       };
     } else {
       return {
         code: 500,
         data: null,
-        msg: '文章总数获取失败',
+        msg: '精选文章总数获取失败',
       };
     }
   }

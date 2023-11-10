@@ -31,13 +31,13 @@ export class CategoryProvider {
     return res;
   }
 
-  // 获取分类列表
+  // 获取分类精选列表
   async getCategoryList() {
     const categoryList = await this.categoryModal.find().exec();
     const res = await Promise.all(
       categoryList.map(async (category) => {
         const articleList = await this.articleModel
-          .find({ category: category.name })
+          .find({ category: category.name, star: true }) //精选
           .select('title updatedAt _id')
           .lean();
         if (!articleList) {
@@ -54,6 +54,6 @@ export class CategoryProvider {
         };
       }),
     );
-    return res;
+    return res.filter((item) => item.articleList.length !== 0); //没有文章的分组过滤掉
   }
 }

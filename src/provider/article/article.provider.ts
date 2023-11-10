@@ -20,7 +20,11 @@ export class ArticleProvider {
     for (const path of paths) {
       const isExist = await this.articleModel.findOne({ path: path });
       if (isExist) {
-        await this.updateArticle(path);
+        const data = getArticleData(path);
+        if (data.content !== isExist.content) {
+          console.log('文章更新:', path);
+          await this.updateArticle(data, path);
+        }
       } else {
         const data = getArticleData(path);
         await this.articleModel.create(data);
@@ -36,8 +40,7 @@ export class ArticleProvider {
   }
 
   // 更新文章
-  async updateArticle(path) {
-    const data = getArticleData(path);
+  async updateArticle(data, path) {
     data.updatedAt = getCurrentTime();
     await this.articleModel.updateOne({ path: path }, data);
   }
@@ -54,11 +57,11 @@ export class ArticleProvider {
     return res;
   }
 
-  // 获取文章列表
+  // 获取精选文章列表
   async getArticleList(params) {
     const { page = 1, pageSize = 10 } = params;
     const res = await this.articleModel
-      .find()
+      .find({ star: true })
       .sort({ _id: -1 })
       .skip((page - 1) * pageSize)
       .limit(pageSize)
@@ -66,9 +69,12 @@ export class ArticleProvider {
     return res;
   }
 
-  // 获取文章数量总数
-  async getAllArticleNum() {
-    const res = await this.articleModel.countDocuments().exec();
+  // 获取精选文章数量总数
+  async getAllStarArticleNum() {
+    const res = await this.articleModel
+      .find({ star: true })
+      .countDocuments()
+      .exec();
     return res;
   }
 
@@ -96,7 +102,7 @@ export class ArticleProvider {
   //根据创建时间返回文章列表timeline
   async getTimelineInfo() {
     const res = this.articleModel
-      .find()
+      .find({ star: true })
       .sort({ updatedAt: -1 })
       .select('title updatedAt _id');
     return res;

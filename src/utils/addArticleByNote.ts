@@ -38,6 +38,8 @@ export function getArticleData(path): Article {
     path: path,
     category: arr[0],
     content: '',
+    star: false,
+    contentLength: 0,
   };
   try {
     const data = fs.readFileSync(rootPath + path, 'utf8');
@@ -48,6 +50,11 @@ export function getArticleData(path): Article {
       )}/$2)\r\n`,
     );
     fileData.content = modifiedText;
+    fileData.contentLength = modifiedText.length;
+    if (modifiedText.length > 1000) {
+      //当文本内容超过1000个字符时,默认精选
+      fileData.star = true;
+    }
     return fileData;
   } catch (err) {
     console.error(err);

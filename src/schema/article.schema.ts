@@ -16,7 +16,7 @@ export class Article extends Document {
   category: string;
 
   @Prop({ default: false, index: true })
-  hidden: boolean;
+  star: boolean;
 
   @Prop({ default: '', index: true, unique: true })
   path: string;
@@ -35,6 +35,9 @@ export class Article extends Document {
 
   @Prop({ default: 0, index: true })
   top: number;
+
+  @Prop({ default: 0, index: true })
+  contentLength: number;
 
   @Prop({ default: 0 })
   viewer: number; // 浏览人数
