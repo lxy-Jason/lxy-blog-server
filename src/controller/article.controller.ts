@@ -66,6 +66,16 @@ export class ArticleController {
   }
 
   @Post('getArticleList')
+  @ApiParam({
+    name: 'page',
+    description: '页数',
+    required: true,
+  })
+  @ApiParam({
+    name: 'pageSize',
+    description: '一页多少条',
+    required: true,
+  })
   async getArticleList(@Body() params: ArticleListParams) {
     const res = await this.articleProvider.getArticleList(params);
     const total = await this.articleProvider.getAllStarArticleNum();
