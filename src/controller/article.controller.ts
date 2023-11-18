@@ -1,4 +1,4 @@
-import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ArticleProvider } from '../provider/article/article.provider';
 import { ArticleListParams } from '../types/article';
@@ -8,6 +8,10 @@ import { ArticleListParams } from '../types/article';
 export class ArticleController {
   constructor(private readonly articleProvider: ArticleProvider) {}
 
+  @ApiOperation({
+    summary: '更新文章',
+    description: 'git pull 更新文章',
+  })
   @Get('setArticleByPath')
   async setCategoryByFileName() {
     return await this.articleProvider.setArticleByPath();

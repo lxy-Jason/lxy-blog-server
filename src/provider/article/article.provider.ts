@@ -27,6 +27,7 @@ export class ArticleProvider {
         }
       } else {
         const data = getArticleData(path);
+        console.log('新增文章:', path);
         await this.articleModel.create(data);
       }
     }
@@ -35,14 +36,23 @@ export class ArticleProvider {
   // 通过git pull 更新文章
   async setArticleByPath() {
     const paths = await getArticlePath(); //获取文章路径
-    console.log(paths);
+    console.log('更新文章列表:', paths);
+    if(!paths.length){
+      return {
+        msg:'无更新'
+      }
+    }
     await this.handlerArticle(paths);
+    return {
+      msg:'更新完成',
+      data:paths
+    }
   }
 
   // 更新文章
   async updateArticle(data, path) {
     data.updatedAt = getCurrentTime();
-    await this.articleModel.updateOne({ path: path }, data);
+    return this.articleModel.updateOne({ path: path }, data);
   }
 
   // 通过文章路径获取文章

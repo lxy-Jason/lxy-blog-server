@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import * as path from 'path';
+import { sep, join, normalize } from 'path';
 import simpleGit from 'simple-git';
 import { Article } from '../types/article';
 
@@ -25,13 +25,7 @@ export async function getArticlePath(): Promise<string[]> {
 }
 
 export function getArticleData(path): Article {
-  let arr = [];
-  if (process.env.NODE_ENV === 'development') {
-    arr = path.split('\\');
-  } else {
-    arr = path.split('/');
-  }
-
+  const arr = normalize(path).split(sep);
   const regex = /\!\[(.*)\]\((.*)\)\r\n/g; //匹配图片正则
   const fileData = {
     title: arr.pop().replace('.md', ''),
@@ -70,7 +64,7 @@ export function getAllArticlePath(directoryPath = rootPath) {
     const files = fs.readdirSync(directoryPath);
     files.forEach((file) => {
       if (ignoreFiles.includes(file)) return;
-      const filePath = path.join(directoryPath, file);
+      const filePath = join(directoryPath, file);
       const stats = fs.statSync(filePath);
       if (stats.isFile()) {
         if (!filePath.endsWith('.md')) return; //只获取md文件
