@@ -27,6 +27,7 @@
     "@nestjs/swagger": "^7.1.7",
     "moment": "^2.29.4",
     "mongoose": "^7.4.2",
+    "nest-knife4j": "^1.0.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
     "simple-git": "^3.19.1",
