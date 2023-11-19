@@ -37,16 +37,16 @@ export class ArticleProvider {
   async setArticleByPath() {
     const paths = await getArticlePath(); //获取文章路径
     console.log('更新文章列表:', paths);
-    if(!paths.length){
+    if (!paths.length) {
       return {
-        msg:'无更新'
-      }
+        msg: '无更新',
+      };
     }
     await this.handlerArticle(paths);
     return {
-      msg:'更新完成',
-      data:paths
-    }
+      msg: '更新完成',
+      data: paths,
+    };
   }
 
   // 更新文章

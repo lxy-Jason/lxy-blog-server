@@ -6,6 +6,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ScheduleModule } from '@nestjs/schedule';
 // 引入 Mongoose
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserController } from './controller/user.controller';
@@ -17,8 +18,10 @@ import { Article, ArticleSchema } from './schema/article.schema';
 import { Category, CategorySchema } from './schema/category.schema';
 import { CategoryController } from './controller/category.controller';
 import { ArticleController } from './controller/article.controller';
+import { TasksProvider } from './provider/tasks/tasks.provider';
 
 const url = process.env.MONGO_URL || '127.0.0.1';
+
 @Module({
   imports: [
     MongooseModule.forRoot(`mongodb://${url}`, {
@@ -29,6 +32,7 @@ const url = process.env.MONGO_URL || '127.0.0.1';
       { name: Article.name, schema: ArticleSchema },
       { name: Category.name, schema: CategorySchema },
     ]),
+    ScheduleModule.forRoot(),
   ],
   controllers: [
     AppController,
@@ -36,7 +40,13 @@ const url = process.env.MONGO_URL || '127.0.0.1';
     CategoryController,
     ArticleController,
   ],
-  providers: [AppService, UserProvider, CategoryProvider, ArticleProvider],
-  exports:[ArticleProvider]
+  providers: [
+    AppService,
+    UserProvider,
+    CategoryProvider,
+    ArticleProvider,
+    TasksProvider,
+  ],
+  exports: [ArticleProvider],
 })
 export class AppModule {}
