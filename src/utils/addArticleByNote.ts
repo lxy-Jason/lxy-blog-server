@@ -26,7 +26,8 @@ export async function getArticlePath(): Promise<string[]> {
 
 export function getArticleData(path): Article {
   const arr = normalize(path).split(sep);
-  const regex = /\!\[(.*)\]\((.*)\)\r\n/g; //匹配图片正则
+  const regex = /!\[(.*)]\((.*)\)\r\n/g; //匹配图片正则
+  const regexImg = /<img src="(.*)" alt="(.*)"(.*)>/g; //第二种图片正则
   const fileData = {
     title: arr.pop().replace('.md', ''),
     path: path,
@@ -37,11 +38,17 @@ export function getArticleData(path): Article {
   };
   try {
     const data = fs.readFileSync(rootPath + path, 'utf8');
-    const modifiedText = data.replace(
+    let modifiedText = data.replace(
       regex,
       `![$1](https://raw.githubusercontent.com/lxy-Jason/note/master/${arr.join(
         '/',
       )}/$2)\r\n`,
+    );
+    modifiedText = modifiedText.replace(
+      regexImg,
+      `![$2](https://raw.githubusercontent.com/lxy-Jason/note/master/${arr.join(
+        '/',
+      )}/$1)\r\n`,
     );
     fileData.content = modifiedText;
     fileData.contentLength = modifiedText.length;
