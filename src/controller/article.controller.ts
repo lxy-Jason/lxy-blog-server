@@ -16,7 +16,10 @@ export class ArticleController {
   async setCategoryByFileName() {
     return await this.articleProvider.setArticleByPath();
   }
-
+  @ApiOperation({
+    summary: '更新所有文章',
+    description: '读取本地文件更新所有文章',
+  })
   @Get('updateAllArticle')
   async updateAllArticle() {
     return await this.articleProvider.updateAllArticle();

@@ -16,21 +16,29 @@ export class ArticleProvider {
   ) {}
 
   // 文章处理 1.判断是否存在 2.存在则更新 3.不存在则创建
-  async handlerArticle(paths) {
+  async handlerArticle(paths: string[]) {
+    const updated = [];
+    const created = [];
     for (const path of paths) {
       const isExist = await this.articleModel.findOne({ path: path });
       if (isExist) {
         const data = getArticleData(path);
         if (data.content !== isExist.content) {
           console.log('文章更新:', path);
+          updated.push(path);
           await this.updateArticle(data, path);
         }
       } else {
         const data = getArticleData(path);
         console.log('新增文章:', path);
+        created.push(path);
         await this.articleModel.create(data);
       }
     }
+    return {
+      updated,
+      created,
+    };
   }
 
   // 通过git pull 更新文章
@@ -42,10 +50,10 @@ export class ArticleProvider {
         msg: '无更新',
       };
     }
-    await this.handlerArticle(paths);
+    const res = await this.handlerArticle(paths);
     return {
       msg: '更新完成',
-      data: paths,
+      data: res,
     };
   }
 
@@ -91,7 +99,11 @@ export class ArticleProvider {
   // 读取所有文章路径,更新文章
   async updateAllArticle() {
     const paths = getAllArticlePath(); //获取文章路径
-    await this.handlerArticle(paths);
+    const res = await this.handlerArticle(paths);
+    return {
+      msg: '全部文章更新完成',
+      data: res,
+    };
   }
 
   //根据分类获取文章数量
