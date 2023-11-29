@@ -14,6 +14,11 @@ export class TasksProvider {
     this.logger.debug('定时文章更新');
   }
 
+  // @Cron('0 * * * * *')
+  // async handleCron11() {
+  //   this.logger.debug('定时任务测试1分钟执行一次');
+  // }
+
   //
   // @Interval(10000)
   // handleInterval() {

@@ -1,5 +1,7 @@
 
 # Docker多阶段构建
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+RUN echo 'Asia/Shanghai' >/etc/timezone
 
 ### DEV环境 ###
 FROM node:16.20.1 AS development

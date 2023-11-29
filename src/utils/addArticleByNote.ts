@@ -3,8 +3,8 @@ import { sep, join, normalize } from 'path';
 import simpleGit from 'simple-git';
 import { Article } from '../types/article';
 
-process.env.http_proxy = 'http://127.0.0.1:7890';
-process.env.https_proxy = 'http://127.0.0.1:7890';
+// process.env.http_proxy = 'http://127.0.0.1:7890';
+// process.env.https_proxy = 'http://127.0.0.1:7890';
 const rootPath = 'note/';
 const git = simpleGit(rootPath);
 
