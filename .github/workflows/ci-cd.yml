@@ -7,8 +7,7 @@ on:
 
 jobs:
   build-and-deploy:
-    build-on: ubuntu-latest
-
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2  # 使用 GitHub 官方 action 来检出代码
