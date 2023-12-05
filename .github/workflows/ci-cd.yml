@@ -1,0 +1,41 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy:
+    build-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2  # 使用 GitHub 官方 action 来检出代码
+
+      - name: Build Docker Compose
+        run: |
+          docker-compose build  # 使用 Docker Compose 构建服务
+
+      - name: Save Docker images
+        run: |
+          docker save lxy-blog-server:latest | gzip > lxy-blog-server.tar.gz  # 保存 Docker 镜像为 tar.gz 文件
+
+      - name: Deploy
+        uses: appleboy/scp-action@master  # 使用社区 action 来通过 SCP 传输文件
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          source: "lxy-blog-server.tar.gz"
+          target: "/tmp"
+
+      - name: Load and run Docker image on the server
+        uses: appleboy/ssh-action@master  # 使用社区 action 来通过 SSH 连接服务器并执行命令
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          script: |
+            docker load < /tmp/my-app.tar.gz  # 加载 Docker 镜像
+            docker-compose up -d  # 使用 Docker Compose 启动服务
