@@ -36,5 +36,5 @@ jobs:
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
-            docker load < /tmp/my-app.tar.gz  # 加载 Docker 镜像
+            docker load < /tmp/lxy-blog-server.tar.gz  # 加载 Docker 镜像
             docker-compose up -d  # 使用 Docker Compose 启动服务
