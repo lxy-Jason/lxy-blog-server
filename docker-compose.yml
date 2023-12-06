@@ -2,7 +2,7 @@ version: '3.8'
 services:
   prod:
     container_name: server-prod
-    image: server-prod:1.0.0
+    image: server-prod
     build:
       context: .
       target: production
