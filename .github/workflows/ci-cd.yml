@@ -18,7 +18,7 @@ jobs:
 
       - name: Save Docker images
         run: |
-          docker save lxy-blog-server:latest | gzip > lxy-blog-server.tar.gz  # 保存 Docker 镜像为 tar.gz 文件
+          docker save lxy-blog-server:latest | gzip > lxy-blog-server.tar.gz | ls -l  # 保存 Docker 镜像为 tar.gz 文件
 
       - name: Deploy
         uses: appleboy/scp-action@master  # 使用社区 action 来通过 SCP 传输文件
