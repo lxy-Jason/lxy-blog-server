@@ -30,7 +30,6 @@ ENV NODE_ENV=${NODE_ENV}
 WORKDIR /usr/src/app
 
 COPY package*.json ./
-COPY ./note ./
 
 RUN \
   npm config set registry https://registry.npm.taobao.org \
