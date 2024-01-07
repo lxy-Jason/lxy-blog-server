@@ -2,8 +2,15 @@ import * as fs from 'fs';
 import { sep, join, normalize } from 'path';
 import simpleGit from 'simple-git';
 import { Article } from '../types/article';
+import tryAgain from './tryAgain';
 
 const rootPath = 'note/';
+
+// git.clone方法封装
+const cloneRepo = async (repoUrl, destPath) => {
+  const git = simpleGit();
+  await git.clone(repoUrl, destPath);
+};
 
 //判断note文件夹是否存在
 async function cloneRepository(rootPath) {
@@ -11,35 +18,30 @@ async function cloneRepository(rootPath) {
     fs.statSync(rootPath);
   } catch (err) {
     console.log('note文件夹不存在');
-    const git = simpleGit();
-    await git.clone('https://github.com/lxy-Jason/note.git', './note');
+    await tryAgain(
+      cloneRepo,
+      'git clone',
+      5,
+      'https://github.com/lxy-Jason/note.git',
+      './note',
+    );
     console.log('note clone finish');
   }
 }
-
 cloneRepository(rootPath);
 
-let pullTime = 1; //git pull 失败重试次数
-//获取文件名数组
-export async function getArticlePath(): Promise<string[]> {
+// git.pull方法封装
+const gitPull = async () => {
   const git = simpleGit(rootPath);
   // 设置 git config,解决中文乱码问题
   git.addConfig('core.quotepath', 'false', () => {
     console.log('git config 设置文件名不转义！');
   });
-  let pullResult = null;
-  try {
-    pullResult = await git.pull();
-  } catch (err) {
-    console.log('git pull 失败');
-    if (pullTime < 5) {
-      console.log(`第${pullTime}次重试`);
-      pullTime++;
-      return await getArticlePath();
-    } else {
-      console.log('失败超过5次', err);
-    }
-  }
+  await git.pull();
+};
+//获取文件名数组
+export async function getArticlePath(): Promise<string[]> {
+  const pullResult = await tryAgain(gitPull, 'git pull', 5);
   return pullResult?.files.filter((item) => item.endsWith('.md')) || [];
 }
 
