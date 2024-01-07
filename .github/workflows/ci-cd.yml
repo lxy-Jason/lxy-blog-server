@@ -37,6 +37,7 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
             docker stop blog-server #停止老镜像
+            docker rm blog-server 
             docker load < /tmp/lxy-blog-server.tar.gz  # 加载 Docker 镜像
             docker run --name blog-server --net=host server-prod # 使用 Docker Compose 启动服务
             exit
