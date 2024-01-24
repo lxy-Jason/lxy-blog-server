@@ -29,6 +29,8 @@ ENV NODE_ENV=${NODE_ENV}
 
 WORKDIR /usr/src/app
 
+RUN git clone https://github.com/lxy-Jason/note.git
+
 COPY package*.json ./
 
 RUN \
