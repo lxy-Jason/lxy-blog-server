@@ -22,7 +22,7 @@ async function cloneRepository(rootPath) {
       cloneRepo,
       'git clone',
       5,
-      'https://github.com/lxy-Jason/note.git',
+      'https://gitclone.com/github.com/lxy-Jason/note.git',
       './note',
     );
     console.log('note clone finish');
