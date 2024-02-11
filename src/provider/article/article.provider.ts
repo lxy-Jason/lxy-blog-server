@@ -62,6 +62,15 @@ export class ArticleProvider {
     data.updatedAt = getCurrentTime();
     return this.articleModel.updateOne({ path: path }, data);
   }
+  async updateArticleById(params) {
+    const {id,content} = params
+    const data = await this.articleModel.findOne({_id:id}).exec()
+    if(data){
+      data.updatedAt = getCurrentTime();
+      data.content = content
+      return this.articleModel.updateOne({ _id: id }, data);
+    }
+  }
 
   // 通过文章路径获取文章
   async getArticleByPath(path: string) {
@@ -129,4 +138,6 @@ export class ArticleProvider {
       .select('title updatedAt _id');
     return res;
   }
+
+
 }

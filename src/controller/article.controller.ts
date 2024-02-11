@@ -178,4 +178,36 @@ export class ArticleController {
       };
     }
   }
+  @ApiOperation({
+    summary: '更新文章',
+    description: '通过id更新文章',
+  })
+  @Post('updateArticleById')
+  @ApiParam({
+    name: 'id',
+    description: '文章id',
+    required: true,
+  })
+  @ApiParam({
+    name: 'content',
+    description: '文章内容',
+    required: true,
+  })
+  async updateArticleById(@Body() params) {
+    const res = await this.articleProvider.updateArticleById(params)
+    if(res){
+      return {
+        code: 200,
+        data: res,
+        msg: '文章更新成功'
+      }
+    }
+    else {
+      return {
+        code: 500,
+        data: res,
+        msg: '文章更新失败'
+      }
+    }
+  }
 }
