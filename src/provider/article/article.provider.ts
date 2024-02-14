@@ -141,17 +141,25 @@ export class ArticleProvider {
 
   // 全局搜索功能,关键字匹配
   async searchArticle(params:string) {
-    console.log(params)
     const key = new RegExp(params,'gi')
-    const res = await this.articleModel
+    const articles = await this.articleModel
       .find({
         $or: [
-          {"title": { $regex: key }},
-          {"content": { $regex: key }}
+          { "title": { $regex: key } },
+          { "content": { $regex: key } }
         ]
       })
-      .select('title content _id')
-    console.log(res)
-    return res
+      .select('title content _id category')
+    const matchedSentences = articles.map(article => {
+      const {title, content,_id,category} = article
+      const matchedContentSentences = content.split('\n').filter(sentence => key.test(sentence));
+      return {
+        title,
+        _id,
+        category,
+        sentences: matchedContentSentences
+      }
+    })
+    return matchedSentences
   }
 }
