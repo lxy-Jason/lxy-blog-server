@@ -2,6 +2,7 @@ import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ArticleProvider } from '../provider/article/article.provider';
 import { ArticleListParams } from '../types/article';
+import { get } from 'mongoose';
 
 @ApiTags('article')
 @Controller('/article/')
@@ -208,6 +209,33 @@ export class ArticleController {
         data: res,
         msg: '文章更新失败'
       }
+    }
+  }
+
+  @ApiOperation({
+    summary: '关键词搜索文章',
+    description: '关键词搜索文章',
+  })
+  @Get('searchArticle/:key')
+  @ApiParam({
+    name: 'key',
+    description: '关键词',
+    required: true,
+  })
+  async searchArticle(@Param('key') key: string) {
+    const res = await this.articleProvider.searchArticle(key)
+    if (res) {
+      return {
+        code: 200,
+        data: res,
+        msg: '关键词搜索成功',
+      };
+    } else {
+      return {
+        code: 500,
+        data: null,
+        msg: '关键词搜索失败',
+      };
     }
   }
 }

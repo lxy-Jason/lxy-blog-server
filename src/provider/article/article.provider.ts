@@ -139,5 +139,19 @@ export class ArticleProvider {
     return res;
   }
 
-
+  // 全局搜索功能,关键字匹配
+  async searchArticle(params:string) {
+    console.log(params)
+    const key = new RegExp(params,'gi')
+    const res = await this.articleModel
+      .find({
+        $or: [
+          {"title": { $regex: key }},
+          {"content": { $regex: key }}
+        ]
+      })
+      .select('title content _id')
+    console.log(res)
+    return res
+  }
 }
