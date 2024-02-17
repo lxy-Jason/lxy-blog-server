@@ -153,11 +153,18 @@ export class ArticleProvider {
     const matchedSentences = articles.map(article => {
       const {title, content,_id,category} = article
       const matchedContentSentences = content.split('\n').filter(sentence => key.test(sentence));
+      const children = matchedContentSentences.map((item,index) => {
+        return {
+          title:item,
+          key: index + _id, //通过_id找到对应的文章_id,index结合_id用于唯一标识
+          isLeaf: true
+        }
+      })
       return {
         title,
-        _id,
+        key:_id,
         category,
-        sentences: matchedContentSentences
+        children
       }
     })
     return matchedSentences
