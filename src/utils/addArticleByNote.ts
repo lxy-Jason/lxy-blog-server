@@ -47,7 +47,7 @@ export async function getArticlePath(): Promise<string[]> {
 
 export function getArticleData(path): Article {
   const arr = normalize(path).split(sep);
-  const regex = /!\[(.*)]\((.*)\)\r\n/g; //匹配图片正则
+  const regex = /!\[(.*)]\((.*)\)/g; //匹配图片正则
   const regexImg = /<img src="(.*)" alt="(.*)"(.*)>/g; //第二种图片正则
   const fileData = {
     title: arr.pop().replace('.md', ''),
