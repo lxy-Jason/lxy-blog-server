@@ -3,7 +3,7 @@ import { CategoryProvider } from '../provider/category/category.provider';
 import { Controller, Get } from '@nestjs/common';
 import { getArticleCategory } from '../utils/addArticleByNote';
 
-@ApiTags('category')
+@ApiTags('分类接口')
 @Controller('/category/')
 export class CategoryController {
   constructor(private readonly categoryProvider: CategoryProvider) {}
@@ -14,6 +14,7 @@ export class CategoryController {
   })
   @Get('updateAllCategory')
   async updateAllCategory() {
+    console.log('更新所有分类')
     const categorys = getArticleCategory();
     for (const category of categorys) {
       await this.categoryProvider.updateCategory(category);
@@ -22,6 +23,7 @@ export class CategoryController {
 
   @Get('getCategoryList')
   async getCategoryList() {
+    console.log('获取分类列表')
     const res = await this.categoryProvider.getCategoryList();
     if (res) {
       return {

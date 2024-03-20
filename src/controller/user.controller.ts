@@ -3,7 +3,7 @@ import { UserProvider } from '../provider/user/user.provider';
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { User } from '../types/user';
 
-@ApiTags('user')
+@ApiTags('用户接口')
 @Controller('/user/')
 export class UserController {
   constructor(private readonly userProvider: UserProvider) {}

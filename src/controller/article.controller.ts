@@ -4,7 +4,7 @@ import { ArticleProvider } from '../provider/article/article.provider';
 import { ArticleListParams } from '../types/article';
 import { get } from 'mongoose';
 
-@ApiTags('article')
+@ApiTags('文章接口')
 @Controller('/article/')
 export class ArticleController {
   constructor(private readonly articleProvider: ArticleProvider) {}
