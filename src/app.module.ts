@@ -24,7 +24,8 @@ import { TasksProvider } from './provider/tasks/tasks.provider';
 import { MetaProvider } from './provider/meta/meta.provider';
 import { MetaController } from './controller/meta.controller';
 
-
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { RequestInterceptor } from './utils/request.interceptor';
 
 const url = process.env.MONGO_URL || '127.0.0.1';
 
@@ -55,7 +56,11 @@ const url = process.env.MONGO_URL || '127.0.0.1';
     CategoryProvider,
     ArticleProvider,
     TasksProvider,
-    MetaProvider
+    MetaProvider,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: RequestInterceptor,
+    },
   ],
   exports: [ArticleProvider],
 })

@@ -30,7 +30,7 @@ export class SiteInfo {
   author: string;
   authorLogo: string;
   authorLogoDark: string;
-  authDesc: string;
+  authorDesc: string;
   siteLogo: string;
   siteLogoDark: string;
   favicon: string;

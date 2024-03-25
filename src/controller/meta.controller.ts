@@ -1,6 +1,6 @@
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { MetaProvider } from '../provider/meta/meta.provider';
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Headers } from '@nestjs/common';
 import { UpdateSiteInfoDto } from '../types/meta.dto';
 
 @ApiTags('网站信息接口')
@@ -13,7 +13,7 @@ export class MetaController {
   })
   @Get('/getSiteInfo')
   async getUserByName() {
-    console.log('获取站点信息,2222222222')
+    console.log('获取站点信息')
     const data = await this.metaProvider.getSiteInfo();
     console.log(data,'data')
     return {
